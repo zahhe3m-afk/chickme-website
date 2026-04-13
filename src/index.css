@@ -1,0 +1,203 @@
+@import "tailwindcss";
+
+/* =============================================
+   CHICKME — GLOBAL STYLES
+   "Fried with Fun!" | Tactical Maximalism
+   ============================================= */
+
+@theme {
+  --color-red:        #ff002b;
+  --color-red-mid:    #ff2760;
+  --color-red-light:  #ff5f91;
+  --color-yellow:     #ffe600;
+  --color-yellow-soft:#ffec66;
+  --color-black:      #141414;
+  --color-white:      #ffffff;
+
+  --font-display:   'Lilita One', cursive;
+  --font-secondary: 'Quicksand', sans-serif;
+  --font-body:      'Raleway', sans-serif;
+}
+
+/* CSS custom properties for runtime use (animations, JS, etc.) */
+:root {
+  --red:         #ff002b;
+  --red-mid:     #ff2760;
+  --red-light:   #ff5f91;
+  --yellow:      #ffe600;
+  --yellow-soft: #ffec66;
+  --black:       #141414;
+  --white:       #ffffff;
+
+  --font-display:   'Lilita One', cursive;
+  --font-secondary: 'Quicksand', sans-serif;
+  --font-body:      'Raleway', sans-serif;
+}
+
+/* ===== RESET & BASE ===== */
+*, *::before, *::after {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  overflow-x: clip;
+}
+
+body {
+  font-family: var(--font-body);
+  background: var(--black);
+  color: var(--white);
+  overflow-x: clip;
+  width: 100%;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+#root {
+  width: 100%;
+  max-width: 100%;
+  margin: 0;
+  text-align: left;
+}
+
+img, svg { display: block; }
+a { text-decoration: none; color: inherit; }
+button { border: none; background: none; cursor: pointer; font-family: inherit; }
+
+/* ===== NOISE / GRAIN OVERLAY (3% — premium packaging texture) ===== */
+.noise-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 9999;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 200 200' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.65' numOctaves='3' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)'/%3E%3C/svg%3E");
+  opacity: 0.03;
+  mix-blend-mode: overlay;
+}
+
+/* ===== CUSTOM CURSOR (desktop / pointer:fine only) ===== */
+@media (pointer: fine) {
+  body, a, button { cursor: none; }
+
+  .cursor {
+    width: 20px;
+    height: 20px;
+    border: 2px solid var(--yellow);
+    border-radius: 50%;
+    position: fixed;
+    top: 0; left: 0;
+    pointer-events: none;
+    z-index: 99999;
+    transform: translate(-50%, -50%);
+    transition: transform 0.12s ease, background 0.12s ease, opacity 0.2s;
+    mix-blend-mode: difference;
+    will-change: transform;
+  }
+
+  .cursor.hover {
+    transform: translate(-50%, -50%) scale(2.5);
+    background: var(--yellow);
+  }
+}
+
+@media (pointer: coarse) {
+  .cursor { display: none; }
+}
+
+/* ===== SECTION BASE ===== */
+.section {
+  padding: 96px 64px;
+  position: relative;
+}
+
+@media (max-width: 900px) {
+  .section { padding: 70px 24px; }
+}
+
+/* ===== SCROLL REVEAL CLASSES ===== */
+/* Initial hidden state */
+.rv  { opacity: 0; transform: translateY(45px);   transition: opacity 0.7s ease, transform 0.7s ease; }
+.rl  { opacity: 0; transform: translateX(-55px);  transition: opacity 0.7s ease, transform 0.7s ease; }
+.rr  { opacity: 0; transform: translateX(55px);   transition: opacity 0.7s ease, transform 0.7s ease; }
+.rs  { opacity: 0; transform: scale(0.85);         transition: opacity 0.7s ease, transform 0.7s ease; }
+
+/* Revealed state */
+.rv.visible, .rl.visible, .rr.visible, .rs.visible {
+  opacity: 1;
+  transform: none;
+}
+
+/* Stagger children */
+.stg > *:nth-child(1)  { transition-delay: 0.00s; }
+.stg > *:nth-child(2)  { transition-delay: 0.10s; }
+.stg > *:nth-child(3)  { transition-delay: 0.20s; }
+.stg > *:nth-child(4)  { transition-delay: 0.30s; }
+.stg > *:nth-child(5)  { transition-delay: 0.40s; }
+.stg > *:nth-child(6)  { transition-delay: 0.50s; }
+
+/* ===== KEYFRAMES ===== */
+@keyframes bounce {
+  to { transform: translateY(-18px) rotate(5deg); }
+}
+
+@keyframes load {
+  to { width: 100%; }
+}
+
+@keyframes float {
+  0%, 100% { transform: translateY(0) rotate(0deg); }
+  50%       { transform: translateY(-20px) rotate(8deg); }
+}
+
+@keyframes scrollDot {
+  0%   { transform: translateY(0); opacity: 1; }
+  80%  { transform: translateY(18px); opacity: 0; }
+  100% { transform: translateY(0); opacity: 0; }
+}
+
+@keyframes marquee {
+  from { transform: translateX(0); }
+  to   { transform: translateX(-50%); }
+}
+
+@keyframes heroFadeUp {
+  from { opacity: 0; transform: translateY(30px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+
+@keyframes pulseLogo {
+  0%, 100% { transform: scale(1); opacity: 1; }
+  50%       { transform: scale(1.06); opacity: 0.85; }
+}
+
+/* ===== MAGNETIC BUTTON BASE ===== */
+.magnetic {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  position: relative;
+  transition: transform 0.3s cubic-bezier(0.23, 1, 0.32, 1);
+  filter: url(#gooey);
+}
+
+/* ===== RESPONSIVE HELPERS ===== */
+@media (max-width: 600px) {
+  .section { padding: 60px 20px; }
+}
+
+/* ===== MOBILE GLOBAL FIXES ===== */
+/* Prevent accidental pull-to-refresh */
+body { overscroll-behavior-y: contain; }
+
+/* Section padding — halve on mobile */
+@media (max-width: 768px) {
+  #about, #menu, #whyus, #gallery, #cta, #location {
+    padding-top: 64px !important;
+    padding-bottom: 64px !important;
+  }
+  footer { padding-top: 56px !important; padding-bottom: 32px !important; }
+}
