@@ -13,7 +13,11 @@ const NAV_LINKS = [
 export default function Navbar() {
   const [scrolled, setScrolled] = useState(false)
   const [menuOpen, setMenuOpen] = useState(false)
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(() =>
+    typeof window !== 'undefined'
+      ? window.matchMedia('(max-width: 768px)').matches
+      : false
+  )
   const overlayRef = useRef(null)
   const linkRefs = useRef([])
   const orderBtnOverlayRef = useRef(null)
@@ -33,7 +37,6 @@ export default function Navbar() {
   useEffect(() => {
     const mq = window.matchMedia('(max-width: 768px)')
     const onChange = (e) => setIsMobile(e.matches)
-    setIsMobile(mq.matches)
     mq.addEventListener('change', onChange)
     return () => mq.removeEventListener('change', onChange)
   }, [])

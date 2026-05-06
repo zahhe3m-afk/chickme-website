@@ -362,6 +362,7 @@ export default function ScrollVideo() {
           >
             <a
               href="#menu"
+              onClick={(e) => { e.preventDefault(); document.getElementById('menu')?.scrollIntoView({ behavior: 'smooth' }) }}
               style={{
                 padding: '16px 40px', borderRadius: 9999,
                 background: YELLOW, color: '#141414',
@@ -386,6 +387,7 @@ export default function ScrollVideo() {
             </a>
             <a
               href="#location"
+              onClick={(e) => { e.preventDefault(); document.getElementById('location')?.scrollIntoView({ behavior: 'smooth' }) }}
               style={{
                 padding: '16px 40px', borderRadius: 9999,
                 background: 'transparent',

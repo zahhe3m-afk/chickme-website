@@ -36,25 +36,20 @@ export default function Gallery() {
   const makeOverlayRef = useCallback((index) => (el) => { overlayRefs.current[index] = el }, [])
   const makeLabelRef = useCallback((index) => (el) => { labelRefs.current[index] = el }, [])
 
-  // Stable event handlers stored in refs — avoids new function identity on every render (advanced-event-handler-refs)
-  const handlersRef = useRef(null)
   // Track which item is tapped open on mobile
   const tappedRef = useRef(-1)
 
-  if (handlersRef.current === null) {
-    handlersRef.current = {
-      enter: (index) => {
-        gsap.to(innerRefs.current[index], { scale: 1.06, duration: 0.4, ease: 'power2.out' })
-        gsap.to(overlayRefs.current[index], { opacity: 1, duration: 0.3 })
-        gsap.to(labelRefs.current[index], { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out' })
-      },
-      leave: (index) => {
-        gsap.to(innerRefs.current[index], { scale: 1, duration: 0.5, ease: 'power2.out' })
-        gsap.to(overlayRefs.current[index], { opacity: 0, duration: 0.3 })
-        gsap.to(labelRefs.current[index], { y: 16, opacity: 0, duration: 0.3 })
-      },
-    }
-  }
+  const handleEnter = useCallback((index) => {
+    gsap.to(innerRefs.current[index], { scale: 1.06, duration: 0.4, ease: 'power2.out' })
+    gsap.to(overlayRefs.current[index], { opacity: 1, duration: 0.3 })
+    gsap.to(labelRefs.current[index], { y: 0, opacity: 1, duration: 0.3, ease: 'power2.out' })
+  }, [])
+
+  const handleLeave = useCallback((index) => {
+    gsap.to(innerRefs.current[index], { scale: 1, duration: 0.5, ease: 'power2.out' })
+    gsap.to(overlayRefs.current[index], { opacity: 0, duration: 0.3 })
+    gsap.to(labelRefs.current[index], { y: 16, opacity: 0, duration: 0.3 })
+  }, [])
 
   useEffect(() => {
     const ctx = gsap.context(() => {
@@ -154,7 +149,9 @@ export default function Gallery() {
                 innerRef={makeInnerRef(index)}
                 overlayRef={makeOverlayRef(index)}
                 labelRef={makeLabelRef(index)}
-                handlers={handlersRef.current}
+                onEnter={handleEnter}
+                onLeave={handleLeave}
+                tappedRef={tappedRef}
               />
             )
           })}
@@ -165,7 +162,19 @@ export default function Gallery() {
 }
 
 // Extracted as a named component so React can diff it properly and event handlers stay stable per item
-function GalleryItem({ item, index, isRowSpan, isColSpan, gridStyle, innerRef, overlayRef, labelRef, handlers }) {
+function GalleryItem({
+  item,
+  index,
+  isRowSpan,
+  isColSpan,
+  gridStyle,
+  innerRef,
+  overlayRef,
+  labelRef,
+  onEnter,
+  onLeave,
+  tappedRef,
+}) {
   return (
     <div
       className={[
@@ -183,19 +192,19 @@ function GalleryItem({ item, index, isRowSpan, isColSpan, gridStyle, innerRef, o
         border: item.border || 'none',
         ...gridStyle,
       }}
-      onMouseEnter={() => handlers.enter(index)}
-      onMouseLeave={() => handlers.leave(index)}
+      onMouseEnter={() => onEnter(index)}
+      onMouseLeave={() => onLeave(index)}
       onTouchStart={(e) => {
         e.preventDefault()
         const prev = tappedRef.current
         if (prev === index) {
           // Second tap — close
-          handlers.leave(index)
+          onLeave(index)
           tappedRef.current = -1
         } else {
           // Close previous
-          if (prev !== -1) handlers.leave(prev)
-          handlers.enter(index)
+          if (prev !== -1) onLeave(prev)
+          onEnter(index)
           tappedRef.current = index
         }
       }}

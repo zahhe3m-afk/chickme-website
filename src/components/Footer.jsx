@@ -5,9 +5,8 @@ const MENU_LINKS = ['Fried Chicken', 'Loaded Burgers', 'Fresh Pizzas', 'Cold Dri
 
 const COMPANY_LINKS = [
   { label: 'About Us', href: '#about' },
-  { label: 'Why Chickme', href: '#why-us' },
+  { label: 'Why Chickme', href: '#whyus' },
   { label: 'Gallery', href: '#gallery' },
-  { label: 'Careers', href: '#careers' },
 ];
 
 const SOCIAL_LINKS = [

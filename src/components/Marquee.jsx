@@ -123,6 +123,8 @@ function Marquee() {
           >
             {i > 0 && <StarSVG />}
             <span
+              dir={/[؀-ۿ]/.test(item) ? 'rtl' : undefined}
+              lang={/[؀-ۿ]/.test(item) ? 'ar' : undefined}
               style={{
                 fontFamily: 'var(--font-display)',
                 fontSize: 'clamp(0.9rem, 1.8vw, 1.15rem)',

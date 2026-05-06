@@ -79,7 +79,7 @@ export default function CTA() {
         .from(followBtnRef.current,{ y: 30, opacity: 0, duration: 0.5, ease: 'power3.out' }, '-=0.2')
     }, sectionRef)
     return () => ctx.revert()
-  }, []) // intentionally empty — GSAP context is set up once on mount
+  }, [followBtnRef]) // GSAP context is set up once; the magnetic ref object is stable
 
   return (
     <section
